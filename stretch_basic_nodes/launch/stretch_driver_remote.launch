@@ -1,0 +1,43 @@
+<launch>
+  <!-- Modified stretch_driver launch file for the Stretch Robot by Hello Robot-->
+  <!-- Added an argument for machine so remote launch works -->
+  <!-- Added an argument for stretch_driver mode -->
+  
+  <arg name="machine" />
+  
+  <param name="robot_description" textfile="$(find stretch_description)/urdf/stretch.urdf" />
+  <arg name="calibrated_controller_yaml_file" value="/home/hello-robot/catkin_ws/src/stretch_ros/stretch_core/config/controller_calibration_head.yaml"/>
+  <arg name="mode" default="navigation" />
+  
+ 
+  <node
+      name="joint_state_publisher"
+      pkg="joint_state_publisher"
+      type="joint_state_publisher"
+      machine="$(arg machine)">
+    <param name="rate" value="15.0"/>
+    <rosparam param="source_list">
+      [/stretch/joint_states]
+    </rosparam>
+  </node>
+  
+  <node
+      name="robot_state_publisher"
+      pkg="robot_state_publisher"
+      type="robot_state_publisher"
+ 
+      machine="$(arg machine)" >
+    <param name="publish_frequency" value="15.0"/>
+  </node>
+
+  <node name="stretch_driver" pkg="stretch_core" type="stretch_driver" output="screen" machine="$(arg machine)">
+    
+    <param name="timeout" type="double" value="0.5"/>
+    <param name="rate" type="double" value="25.0"/>
+    
+    <remap from="cmd_vel" to="/stretch/cmd_vel" />
+    <remap from="joint_states" to="/stretch/joint_states" />
+    <param name="controller_calibration_file" type="string" value="$(arg calibrated_controller_yaml_file)"/>
+    <param name="mode" type="string" value="$(arg mode)" />
+  </node>  
+</launch>

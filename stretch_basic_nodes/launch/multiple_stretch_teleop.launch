@@ -1,0 +1,38 @@
+<launch>
+    <!-- Set up ROS master and remote machines -->
+    <env name="ROS_MASTER_URI" value="http://li-IdeaPad-3-15ADA05:11311/" />
+
+    
+	<!--
+
+    <group ns="stretch_re1_1027">
+    	<env name="ROS_MASTER_URI" value="http://li-IdeaPad-3-15ADA05:11311/" />
+    	<machine name="stretch-re1-1027" user="hello-robot" address="192.168.1.111" env-loader="~/stretch_remote_env.sh" />
+        <include file="$(find stretch_basic_nodes)/launch/stretch_driver_remote.launch" >
+            <arg name="machine" value="stretch-re1-1027" />
+            <arg name="mode" value="navigation" />
+        </include>
+    </group>
+	-->
+	
+	
+	
+
+    <group ns="stretch_re1_1028">
+    	<env name="ROS_MASTER_URI" value="http://li-IdeaPad-3-15ADA05:11311/" />
+    	<machine name="stretch-re1-1028" user="hello-robot" address="192.168.1.115" env-loader="~/stretch_remote_env.sh" /> 
+        <include file="$(find stretch_basic_nodes)/launch/stretch_driver_remote.launch" >
+            <arg name="machine" value="stretch-re1-1028" />
+            <arg name="mode" value="navigation" />
+        </include>
+    </group>
+
+
+
+	
+    <!-- Start Teleop keyboard node on ROS Master -->
+    <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" >
+        <remap from="cmd_vel" to="stretch/cmd_vel" />
+    </node>
+    <!-- -->
+</launch>
